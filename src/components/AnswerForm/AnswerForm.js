@@ -45,6 +45,7 @@ function AnswerForm(props) {
                         </ToggleButton>
                         ))}
                     </ButtonGroup>
+                    <br />
                     <Form.Control
                         type="text"
                         value={answer}
