@@ -55,7 +55,7 @@ function Exercise() {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', 'X-API-KEY': process.env.REACT_APP_API_KEY_VALUE },
                 body: JSON.stringify({
-                    answer: answer,
+                    fullTextAnswer: answer,
                     userId: globalState.userId,
                     time: new Date().toISOString(),
                     timeToClick: timeToClick,

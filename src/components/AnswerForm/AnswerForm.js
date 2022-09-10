@@ -7,7 +7,7 @@ function AnswerForm(props) {
     const initialAnswer = "";
     const [isAnswered, setAnswered] = useState(false);
     const [answer, setAnswer] = useState(initialAnswer);
-    const [clickTime, setClickTime] = useState(null);
+    const [answerTime, setAnswerTime] = useState(null);
     const [startTime, setStartTime] = useState(new Date());
 
     const answers = [
@@ -17,7 +17,7 @@ function AnswerForm(props) {
     
     const handleSubmit = (event) => {
         event.preventDefault();
-        props.onSubmit(answer, (clickTime - startTime), (new Date() - startTime));
+        props.onSubmit(answer, (answerTime - startTime), (new Date() - startTime));
         setAnswered(false);
         setAnswer(initialAnswer);
         setStartTime(new Date());
@@ -28,29 +28,32 @@ function AnswerForm(props) {
         <div>
             <Form className="vertical-center">
                 <Form.Group className="mb-3" controlId="formBasicAudio">
-                    <Form.Label>Please answer the question by <b>clicking on one of the buttons</b> below.</Form.Label><br />
+                    <Form.Label>Please answer the question by writing either one of the two sentences (only those word written in <b>bold</b>).</Form.Label><br />
                     <ButtonGroup>
                         {answers.map((a, idx) => (
                         <ToggleButton
-                            required
-                            disabled={isAnswered}
+                            className="information-button"
+                            disabled={true}
                             key={idx}
                             id={`radio-${idx}`}
                             type="radio"
                             variant={'outline-success'}
                             name="radio"
                             value={a.value}
-                            checked={answer === a.value}
-                            onChange={(e) => {
-                                setClickTime(new Date());
-                                setAnswer(e.currentTarget.value);
-                                setAnswered(true);
-                            }}
                         >
                             <b>{a.name}</b> <br /> {a.payout}
                         </ToggleButton>
                         ))}
                     </ButtonGroup>
+                    <Form.Control
+                        type="text"
+                        value={answer}
+                        disabled={isAnswered}
+                        onChange={(e) => {
+                            setAnswerTime(new Date());
+                            setAnswer(e.currentTarget.value);
+                            setAnswered(e.currentTarget.value.toLowerCase() === "there are more dots on the right side" || e.currentTarget.value.toLowerCase() === "there are more dots on the left side");
+                        }} />
                     { isAnswered ? 
                     <Alert key={"success"} variant={"success"}>
                         <HiOutlineBadgeCheck size={"2em"} /> Successfully answered!
