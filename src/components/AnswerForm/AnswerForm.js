@@ -51,7 +51,10 @@ function AnswerForm(props) {
                         value={answer}
                         disabled={isAnswered}
                         onChange={(e) => {
-                            setAnswerTime(new Date());
+                            // TODO: check if this fits with other experiments
+                            if(answer === initialAnswer) {
+                                setAnswerTime(new Date());
+                            }
                             setAnswer(e.currentTarget.value);
                             setAnswered(e.currentTarget.value.toLowerCase() === "there are more dots on the right side" || e.currentTarget.value.toLowerCase() === "there are more dots on the left side");
                         }} />
