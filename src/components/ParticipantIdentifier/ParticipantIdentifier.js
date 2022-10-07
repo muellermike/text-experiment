@@ -12,6 +12,7 @@ function ParticipantIdentifier() {
     
     const [extUserId, setExtUserId] = useState("");
     const [imgTime, setImgTime] = useState(1000);
+    const [expName, setExpName] = useState("");
     let navigate = useNavigate();
     const dispatch = useDispatch();
     let query = useQuery();
@@ -23,11 +24,15 @@ function ParticipantIdentifier() {
         if (query.get("img_tm")) {
             setImgTime(query.get("img_tm") * 1000);
         }
+        if (query.get("exp_name")) {
+            setExpName(query.get("exp_name"));
+        }
     }, [query])
 
     const handleSumbit = () => {
         dispatch(storeExternalUserId(extUserId));
         dispatch(storeImageTime(imgTime));
+        dispatch(storeExpName(expName));
         
         // POST user
         const requestOptions = {
