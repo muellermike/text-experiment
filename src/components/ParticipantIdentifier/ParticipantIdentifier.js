@@ -2,7 +2,7 @@ import { useState, React, useEffect } from "react";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from 'react-redux';
-import { storeExternalUserId, storeUserId, storeExperimentId, storeImageTime } from '../../actions';
+import { storeExternalUserId, storeUserId, storeExperimentId, storeImageTime, storeExpName } from '../../actions';
 
 function ParticipantIdentifier() {
 
@@ -12,6 +12,7 @@ function ParticipantIdentifier() {
     
     const [extUserId, setExtUserId] = useState("");
     const [imgTime, setImgTime] = useState(1000);
+    const [expName, setExpName] = useState("");
     let navigate = useNavigate();
     const dispatch = useDispatch();
     let query = useQuery();
@@ -23,11 +24,15 @@ function ParticipantIdentifier() {
         if (query.get("img_tm")) {
             setImgTime(query.get("img_tm") * 1000);
         }
+        if (query.get("exp_name")) {
+            setExpName(query.get("exp_name"));
+        }
     }, [query])
 
     const handleSumbit = () => {
         dispatch(storeExternalUserId(extUserId));
         dispatch(storeImageTime(imgTime));
+        dispatch(storeExpName(expName));
         
         // POST user
         const requestOptions = {
@@ -49,7 +54,12 @@ function ParticipantIdentifier() {
             })
             .then(data =>  {
                 dispatch(storeUserId(data));
-                requestOptions.body = JSON.stringify({ user: data, start: new Date().toISOString(), imageTime: imgTime});
+                requestOptions.body = JSON.stringify({ 
+                    user: data,
+                    start: new Date().toISOString(),
+                    imageTime: imgTime,
+                    experimentName: expName
+                });
                 
                 fetch(process.env.REACT_APP_API_BASE_URL + '/experiments', requestOptions)
                 .then(response => {
